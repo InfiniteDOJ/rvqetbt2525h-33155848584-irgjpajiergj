@@ -3,53 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Hub Gallery</title>
+    <title>Pink Cyber Gallery</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --dark: #1f2937;
-            --light: #f3f4f6;
+            --primary: #ff4b91;       /* Vibrant Pink */
+            --primary-hover: #ff1f71; /* Darker Pink */
+            --bg-dark: #0f0f12;       /* Deep Black/Grey Background */
+            --bg-card: #1a1a24;       /* Lighter Card Background */
+            --text-main: #f3f4f6;     /* Bright Text */
+            --text-muted: #9ca3af;    /* Dimmed Text */
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
         }
 
         /* Tabs Navigation */
         .tabs-nav {
             display: flex;
             justify-content: center;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--bg-card);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-bottom: 1px solid #2a2a35;
         }
 
         .tab-btn {
-            padding: 15px 30px;
+            padding: 20px 40px;
             border: none;
             background: none;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            color: #6b7280;
+            color: var(--text-muted);
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
         }
 
         .tab-btn.active {
             color: var(--primary);
             border-bottom-color: var(--primary);
+            text-shadow: 0 0 10px rgba(255, 75, 145, 0.3);
         }
 
         /* Content Sections */
         .tab-content {
             display: none;
-            max-width: 1200px;
-            margin: 30px auto;
+            max-width: 1400px; /* Expanded container size */
+            margin: 40px auto;
             padding: 20px;
         }
 
@@ -57,88 +65,115 @@
             display: block;
         }
 
-        /* Setup/Import Instructions Tab */
+        /* Settings/Info Tab View */
         .info-container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            max-width: 600px;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            max-width: 650px;
             margin: 0 auto;
-            line-height: 1.6;
+            line-height: 1.7;
+            border: 1px solid #2a2a35;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
         }
 
         code {
-            background: #e5e7eb;
-            padding: 2px 6px;
+            background: #2a2a35;
+            padding: 3px 8px;
             border-radius: 4px;
             font-family: monospace;
+            color: var(--primary);
         }
 
-        /* Gallery Grid */
+        /* Gallery Grid - Expanded Size Layout */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            /* Changed minmax from 280px to 400px to make items significantly larger */
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 35px; /* Increased padding between grid slots */
+        }
+
+        @media (max-width: 500px) {
+            .gallery-grid {
+                grid-template-columns: 1fr; /* Responsiveness for mobile screens */
+            }
         }
 
         .gallery-item {
-            background: white;
-            border-radius: 8px;
+            background: var(--bg-card);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+            border: 1px solid #2a2a35;
         }
 
         .gallery-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(255, 75, 145, 0.2);
+            border-color: var(--primary);
         }
 
+        /* Expanded Image Height Styling */
         .gallery-item img {
             width: 100%;
-            height: 200px;
+            height: 380px; /* Expanded image view height from 200px to 380px */
             object-fit: cover;
             display: block;
+            border-bottom: 1px solid #2a2a35;
         }
 
         .item-info {
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             flex-grow: 1;
+            background: linear-gradient(to bottom, var(--bg-card), #14141c);
         }
 
         .item-title {
-            margin: 0 0 12px 0;
-            font-size: 18px;
+            margin: 0 0 15px 0;
+            font-size: 20px;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
+        /* Pink Action Button */
         .download-btn {
             display: block;
             text-align: center;
             background: var(--primary);
             color: white;
-            padding: 10px;
+            padding: 12px;
             text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: background 0.2s;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(255, 75, 145, 0.3);
         }
 
         .download-btn:hover {
             background: var(--primary-hover);
         }
+        
+        .download-btn:active {
+            transform: scale(0.98);
+        }
 
         .no-images {
             text-align: center;
-            color: #9ca3af;
+            color: var(--text-muted);
             grid-column: 1 / -1;
             font-size: 18px;
-            padding: 40px;
+            padding: 60px;
         }
     </style>
 </head>
@@ -154,12 +189,12 @@
             <h2>How to Import Images</h2>
             <p>To add your own custom images, just open the <code>images.js</code> file on your computer and append new links and names to the array.</p>
             <p><strong>Example Format:</strong></p>
-            <pre style="background: #2d3748; color: #f7fafc; padding: 15px; border-radius: 6px; overflow-x: auto;">
+            <pre style="background: #0f0f12; color: #ff4b91; padding: 20px; border-radius: 8px; border: 1px solid #2a2a35; overflow-x: auto; font-family: monospace;">
 {
     name: "My Custom Image",
     url: "https://example.com/image.jpg"
 }</pre>
-            <p>Once saved, simply click the <strong>Images Tab</strong> above to see your gallery dynamic update with custom names and quick download features.</p>
+            <p>Once saved, simply click the <strong>Images Tab</strong> above to see your updated cinematic pink gallery grid automatically compile!</p>
         </div>
     </section>
 
@@ -183,32 +218,28 @@
             } else if (tabName === 'images') {
                 document.getElementById('images-tab').classList.add('active');
                 event.currentTarget.classList.add('active');
-                displayImages(); // Refresh and build gallery view
+                displayImages(); 
             }
         }
 
         // Display Gallery & Download Logic
         function displayImages() {
             const grid = document.getElementById('galleryGrid');
-            grid.innerHTML = ''; // Clear current view
+            grid.innerHTML = ''; 
 
-            // Check if array exists or has values
             if (typeof importedImages === 'undefined' || importedImages.length === 0) {
-                grid.innerHTML = '<p class="no-images">No data found. Make sure your images.js file is configured correctly.</p>';
+                grid.innerHTML = '<p class="no-images">No data found. Make sure your images.js file is in the same folder.</p>';
                 return;
             }
 
             importedImages.forEach((image) => {
-                // Card Wrapper
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'gallery-item';
                 
-                // Image Element
                 const img = document.createElement('img');
                 img.src = image.url;
                 img.alt = image.name;
                 
-                // Info Area (Title + Button Container)
                 const infoDiv = document.createElement('div');
                 infoDiv.className = 'item-info';
                 
@@ -218,16 +249,14 @@
                 
                 const downloadBtn = document.createElement('a');
                 downloadBtn.className = 'download-btn';
-                downloadBtn.textContent = 'Download';
+                downloadBtn.textContent = 'Download Image';
                 
-                // Trigger file download mechanism using fetch for external images
                 downloadBtn.href = '#';
                 downloadBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     triggerDownload(image.url, image.name);
                 });
                 
-                // Build Card
                 infoDiv.appendChild(title);
                 infoDiv.appendChild(downloadBtn);
                 itemDiv.appendChild(img);
@@ -236,7 +265,7 @@
             });
         }
 
-        // Force browser to download the file directly instead of opening it in a new window
+        // Force Asset Download Stream
         function triggerDownload(url, filename) {
             fetch(url)
                 .then(response => response.blob())
@@ -251,7 +280,6 @@
                     a.remove();
                 })
                 .catch(() => {
-                    // Fallback option if external server blocks direct asset fetch (CORS policies)
                     const targetWindow = window.open(url, '_blank');
                     targetWindow.focus();
                 });
