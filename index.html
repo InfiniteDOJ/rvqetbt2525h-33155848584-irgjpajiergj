@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Hub Gallery</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Content Sections */
+        .tab-content {
+            display: none;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Setup/Import Instructions Tab */
+        .info-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        code {
+            background: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .item-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        .item-title {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .download-btn {
+            display: block;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .no-images {
+            text-align: center;
+            color: #9ca3af;
+            grid-column: 1 / -1;
+            font-size: 18px;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('import')">Import Settings</button>
+        <button class="tab-btn" onclick="switchTab('images')">Images Tab</button>
+    </nav>
+
+    <section id="import-tab" class="tab-content active">
+        <div class="info-container">
+            <h2>How to Import Images</h2>
+            <p>To add your own custom images, just open the <code>images.js</code> file on your computer and append new links and names to the array.</p>
+            <p><strong>Example Format:</strong></p>
+            <pre style="background: #2d3748; color: #f7fafc; padding: 15px; border-radius: 6px; overflow-x: auto;">
+{
+    name: "My Custom Image",
+    url: "https://example.com/image.jpg"
+}</pre>
+            <p>Once saved, simply click the <strong>Images Tab</strong> above to see your gallery dynamic update with custom names and quick download features.</p>
+        </div>
+    </section>
+
+    <section id="images-tab" class="tab-content">
+        <h2>Your Gallery</h2>
+        <div id="galleryGrid" class="gallery-grid">
+            </div>
+    </section>
+
+    <script src="images.js"></script>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (tabName === 'import') {
+                document.getElementById('import-tab').classList.add('active');
+                event.currentTarget.classList.add('active');
+            } else if (tabName === 'images') {
+                document.getElementById('images-tab').classList.add('active');
+                event.currentTarget.classList.add('active');
+                displayImages(); // Refresh and build gallery view
+            }
+        }
+
+        // Display Gallery & Download Logic
+        function displayImages() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = ''; // Clear current view
+
+            // Check if array exists or has values
+            if (typeof importedImages === 'undefined' || importedImages.length === 0) {
+                grid.innerHTML = '<p class="no-images">No data found. Make sure your images.js file is configured correctly.</p>';
+                return;
+            }
+
+            importedImages.forEach((image) => {
+                // Card Wrapper
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'gallery-item';
+                
+                // Image Element
+                const img = document.createElement('img');
+                img.src = image.url;
+                img.alt = image.name;
+                
+                // Info Area (Title + Button Container)
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'item-info';
+                
+                const title = document.createElement('h3');
+                title.className = 'item-title';
+                title.textContent = image.name;
+                
+                const downloadBtn = document.createElement('a');
+                downloadBtn.className = 'download-btn';
+                downloadBtn.textContent = 'Download';
+                
+                // Trigger file download mechanism using fetch for external images
+                downloadBtn.href = '#';
+                downloadBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    triggerDownload(image.url, image.name);
+                });
+                
+                // Build Card
+                infoDiv.appendChild(title);
+                infoDiv.appendChild(downloadBtn);
+                itemDiv.appendChild(img);
+                itemDiv.appendChild(infoDiv);
+                grid.appendChild(itemDiv);
+            });
+        }
+
+        // Force browser to download the file directly instead of opening it in a new window
+        function triggerDownload(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename || 'download';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(blobUrl);
+                    a.remove();
+                })
+                .catch(() => {
+                    // Fallback option if external server blocks direct asset fetch (CORS policies)
+                    const targetWindow = window.open(url, '_blank');
+                    targetWindow.focus();
+                });
+        }
+    </script>
+</body>
+</html>
