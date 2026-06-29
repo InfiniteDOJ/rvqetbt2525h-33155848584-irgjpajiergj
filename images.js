@@ -1,8 +1,8 @@
 // Add your image links and names to this array.
 const importedImages = [
     {
-        name: "Beautiful Mountains",
-        url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"
+        name: "Asian woman sucking",
+        url: "https://raw.githubusercontent.com/InfiniteDOJ/rvqetbt2525h-33155848584-irgjpajiergj/refs/heads/main/asianwoman.png"
     },
     {
         name: "Serene Ocean",
